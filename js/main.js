@@ -45,8 +45,11 @@ const MostrarLista = () => {
         /*html*/
         `<div class="alert alert-success">
       <i class="material-icons align-middle">list</i>
-      ${listado[i].articulo} - ${listado[i].cantidad} - ${listado[i].prioridad}
-      <i class="material-icons" style="font-size: 1em">delete</i>
+      <b>${listado[i].articulo}</b>
+      <span class="badge badge-primary"> ${listado[i].cantidad}</span>
+      <span style="padding: 10px;  background-color: orange; border-radius: 10%">
+      ${listado[i].prioridad}</span>
+      <i class="material-icons align-middle float-right" style="font-size: 1.5em; cursor: pointer">delete</i>
       </div>`;
     }
   }
