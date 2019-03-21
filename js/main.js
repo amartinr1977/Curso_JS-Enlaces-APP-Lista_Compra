@@ -72,7 +72,7 @@ const EliminarElemento = identificador => {
       posicion = j;
     }
   }
-  listado.splice(j, 1);
+  listado.splice(posicion, 1);
   localStorage.setItem("listado", JSON.stringify(listado));
   MostrarLista();
 };
