@@ -46,6 +46,7 @@ const MostrarLista = () => {
         `<div class="alert alert-success">
       <i class="material-icons align-middle">list</i>
       ${listado[i].articulo} - ${listado[i].cantidad} - ${listado[i].prioridad}
+      <i class="material-icons" style="font-size: 1em">delete</i>
       </div>`;
     }
   }
@@ -54,6 +55,7 @@ const MostrarLista = () => {
 const AgregarArticulo = e => {
   e.preventDefault();
   CrearLista(articulo.value, cantidad.value, prioridad.value);
+  localStorage.setItem("listado", JSON.stringify(listado));
   MostrarLista();
   formulario.reset();
   ComprobarInput();
@@ -61,6 +63,12 @@ const AgregarArticulo = e => {
 
 const Incializar = () => {
   ComprobarInput();
+  if (localStorage.getItem("listado") == null) {
+    listado = [];
+  } else {
+    listado = JSON.parse(localStorage.getItem("listado"));
+  }
+
   MostrarLista();
 };
 
