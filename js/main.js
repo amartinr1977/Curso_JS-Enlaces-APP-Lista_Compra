@@ -5,6 +5,7 @@ const prioridad = document.querySelector("#prioridad");
 const agregar = document.querySelector("#agregar");
 const formulario = document.querySelector("#formulario");
 const listacompra = document.querySelector("#listacompra");
+const barraprogreso = document.querySelector("#barraprogreso");
 let listado = [];
 
 // (2) Definición de funciones
@@ -23,6 +24,7 @@ const CrearLista = (art, cant, pri) => {
     articulo: art,
     cantidad: cant,
     prioridad: pri,
+    estado: false,
     id: Math.random()
       .toString()
       .substring(2, 9)
@@ -43,16 +45,43 @@ const MostrarLista = () => {
     for (let i = 0; i < listado.length; i++) {
       listacompra.innerHTML +=
         /*html*/
-        `<div class="alert alert-success">
+        `<div class="alert alert-success no-seleccionable" 
+              id="alert-${listado[i].id}">
       <i class="material-icons align-middle">list</i>
       <b>${listado[i].articulo}</b>
       <span class="badge badge-primary"> ${listado[i].cantidad}</span>
       <span style="padding: 10px;  background-color: orange; border-radius: 10%">
       ${listado[i].prioridad}</span>
       <span id="identificador" style="display: none">${listado[i].id}</span>
-      <i class="material-icons align-middle float-right" style="font-size: 1.5em; cursor: pointer">delete </i>
+      <i class="material-icons align-middle float-right"
+        style="font-size: 1.5em; cursor: pointer">delete</i>
+      <i class="material-icons align-middle float-right iconos"
+        id="check-${listado[i].id}"
+        style="font-size: 1.5em; cursor: pointer;">check_circle</i>
       </div>`;
+      let idcheck = "check-" + listado[i].id;
+      let idalert = "alert-" + listado[i].id;
+      if (listado[i].estado) {
+        document.getElementById(idcheck).classList.add("mired");
+        document.getElementById(idalert).classList.add("opacidad");
+      } else {
+        document.getElementById(idcheck).classList.remove("mired");
+        document.getElementById(idalert).classList.remove("opacidad");
+      }
     }
+
+    let contador = 0;
+    listado.forEach(elemento => {
+      if (elemento.estado) contador++;
+    });
+    let porcentaje = ((contador * 100) / listado.length).toFixed(2);
+    barraprogreso.innerHTML =
+      /*html*/
+      `<div class="progress-bar" role="progressbar" 
+        style="width: ${porcentaje}%;" 
+        aria-valuenow="${porcentaje}" aria-valuemin="0" aria-valuemax="100">
+        ${porcentaje}%
+    </div>`;
   }
 };
 
@@ -77,11 +106,37 @@ const EliminarElemento = identificador => {
   MostrarLista();
 };
 
+const ModificarElemento = identificador => {
+  /* if (document.getElementById(identificador).style.color === "rgb(255, 0, 0)") {
+    document.getElementById(identificador).style.color = "rgb(255, 240, 0)";
+  } else {
+    document.getElementById(identificador).style.color = "rgb(255, 0, 0)";
+  } */
+  let idelemento = identificador.split("-")[1];
+  /* let idalert = "alert-" + idelemento;
+  document.getElementById(identificador).classList.toggle("mired");
+  document.getElementById(idalert).classList.toggle("opacidad"); */
+  let indice;
+  listado.forEach((elemento, index) => {
+    if (elemento.id === idelemento) indice = index;
+  });
+  listado[indice].estado = !listado[indice].estado;
+  console.log("El estado es: " + indice);
+
+  localStorage.setItem("listado", JSON.stringify(listado));
+  MostrarLista();
+};
+
 const Actuar = e => {
-  // console.log(e);
+  e.preventDefault();
+  console.log(e);
   if (e.target.innerHTML.trim() === "delete") {
     console.log(e.path[1].children[4].innerHTML);
     EliminarElemento(e.path[1].children[4].innerHTML);
+  }
+  if (e.target.innerHTML.trim() === "check_circle") {
+    console.log(e.target.id);
+    ModificarElemento(e.target.id);
   }
 };
 
