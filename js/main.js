@@ -131,8 +131,9 @@ const Actuar = e => {
   e.preventDefault();
   console.log(e);
   if (e.target.innerHTML.trim() === "delete") {
-    console.log(e.path[1].children[4].innerHTML);
-    EliminarElemento(e.path[1].children[4].innerHTML);
+    const path = event.path || (event.composedPath && event.composedPath());
+    console.log(path[1].children[4].innerHTML);
+    EliminarElemento(path[1].children[4].innerHTML);
   }
   if (e.target.innerHTML.trim() === "check_circle") {
     console.log(e.target.id);
